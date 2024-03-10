@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ViaCepConsumer.Api.Entities;
 using ViaCepConsumer.Api.Infrastructure.Contexts;
 using ViaCepConsumer.Api.Models;
+using ViaCepConsumer.Api.Services.Interfaces;
 
 namespace ViaCepConsumer.Api.Controllers
 {
@@ -11,9 +13,13 @@ namespace ViaCepConsumer.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly DatabaseContext _dbContext;
+        private readonly ITokenService _tokenService;
 
-        public UserController(DatabaseContext dbContext)
-            => _dbContext = dbContext;
+        public UserController(DatabaseContext dbContext, ITokenService tokenService)
+        {
+            _dbContext = dbContext;
+            _tokenService = tokenService;
+        }
 
         [HttpPost]
         [Route("register")]
@@ -49,7 +55,27 @@ namespace ViaCepConsumer.Api.Controllers
                 if (user is null || !string.Equals(user.Password, model.Password))
                     return StatusCode(401, "Username or password is incorrect.");
 
-                return StatusCode(200, user);
+                var token = _tokenService.GenerateToken(user);
+
+                return StatusCode(200, token);
+            }
+            catch
+            {
+                return StatusCode(500, "Internal server error.");
+            }
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUsers()
+        {
+            try
+            {
+                List<User> users = await _dbContext.Users
+                                                   .Include(x => x.Roles)
+                                                   .ToListAsync();
+
+                return StatusCode(200, users);
             }
             catch
             {
