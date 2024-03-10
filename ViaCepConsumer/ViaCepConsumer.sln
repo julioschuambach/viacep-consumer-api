@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViaCepConsumer.Api", "ViaCepConsumer.Api\ViaCepConsumer.Api.csproj", "{7754251F-C69F-405F-AE84-8B28AB411079}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7754251F-C69F-405F-AE84-8B28AB411079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7754251F-C69F-405F-AE84-8B28AB411079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7754251F-C69F-405F-AE84-8B28AB411079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7754251F-C69F-405F-AE84-8B28AB411079}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
