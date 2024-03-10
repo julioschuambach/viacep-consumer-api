@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ViaCepConsumer.Api.Entities;
 using ViaCepConsumer.Api.Infrastructure.Contexts;
 using ViaCepConsumer.Api.Models;
@@ -29,6 +30,26 @@ namespace ViaCepConsumer.Api.Controllers
                 await _dbContext.SaveChangesAsync();
 
                 return StatusCode(201, user);
+            }
+            catch
+            {
+                return StatusCode(500, "Internal server error.");
+            }
+        }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserModel model)
+        {
+            try
+            {
+                User? user = await _dbContext.Users
+                                             .FirstOrDefaultAsync(x => string.Equals(x.Username, model.Username));
+
+                if (user is null || !string.Equals(user.Password, model.Password))
+                    return StatusCode(401, "Username or password is incorrect.");
+
+                return StatusCode(200, user);
             }
             catch
             {
