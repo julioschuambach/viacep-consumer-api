@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ViaCepConsumer.Api.Infrastructure.Contexts;
+using ViaCepConsumer.Api.Infrastructure.Repositories;
+using ViaCepConsumer.Api.Infrastructure.Repositories.Interfaces;
 using ViaCepConsumer.Api.Services;
 using ViaCepConsumer.Api.Services.Interfaces;
 
@@ -16,6 +17,7 @@ namespace ViaCepConsumer.Api
             builder.Services.AddDbContext<DatabaseContext>();
             builder.Services.AddControllers();
             builder.Services.AddTransient<ITokenService, TokenService>();
+            builder.Services.AddTransient<IUserRepository, UserRepository>();
 
             ConfigureAuthentication(builder);
 

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ViaCepConsumer.Api.Entities;
-using ViaCepConsumer.Api.Infrastructure.Contexts;
+using ViaCepConsumer.Api.Infrastructure.Repositories.Interfaces;
 using ViaCepConsumer.Api.Models;
 using ViaCepConsumer.Api.Services.Interfaces;
 
@@ -12,12 +12,12 @@ namespace ViaCepConsumer.Api.Controllers
     [Route("users")]
     public class UserController : ControllerBase
     {
-        private readonly DatabaseContext _dbContext;
+        private readonly IUserRepository _repository;
         private readonly ITokenService _tokenService;
 
-        public UserController(DatabaseContext dbContext, ITokenService tokenService)
+        public UserController(IUserRepository repository, ITokenService tokenService)
         {
-            _dbContext = dbContext;
+            _repository = repository;
             _tokenService = tokenService;
         }
 
@@ -32,10 +32,12 @@ namespace ViaCepConsumer.Api.Controllers
 
             try
             {
-                _dbContext.Users.Add(user);
-                await _dbContext.SaveChangesAsync();
-
+                await _repository.Insert(user);
                 return StatusCode(201, user);
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(400, "Username or email already registered.");
             }
             catch
             {
@@ -49,8 +51,7 @@ namespace ViaCepConsumer.Api.Controllers
         {
             try
             {
-                User? user = await _dbContext.Users
-                                             .FirstOrDefaultAsync(x => string.Equals(x.Username, model.Username));
+                User? user = await _repository.Get(x => string.Equals(x.Username, model.Username));
 
                 if (user is null || !string.Equals(user.Password, model.Password))
                     return StatusCode(401, "Username or password is incorrect.");
@@ -71,9 +72,7 @@ namespace ViaCepConsumer.Api.Controllers
         {
             try
             {
-                List<User> users = await _dbContext.Users
-                                                   .Include(x => x.Roles)
-                                                   .ToListAsync();
+                var users = await _repository.Get();
 
                 return StatusCode(200, users);
             }
