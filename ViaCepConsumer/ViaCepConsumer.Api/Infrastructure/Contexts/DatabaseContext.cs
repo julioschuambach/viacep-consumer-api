@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ViaCepConsumer.Api.Entities;
+using ViaCepConsumer.Api.Infrastructure.Mappings;
 
 namespace ViaCepConsumer.Api.Infrastructure.Contexts
 {
@@ -11,5 +12,11 @@ namespace ViaCepConsumer.Api.Infrastructure.Contexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseSqlServer(_connectionString);
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new UserMapping());
+            modelBuilder.ApplyConfiguration(new RoleMapping());
+        }
     }
 }
