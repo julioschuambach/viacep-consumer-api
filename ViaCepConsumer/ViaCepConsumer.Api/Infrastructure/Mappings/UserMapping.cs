@@ -56,7 +56,21 @@ namespace ViaCepConsumer.Api.Infrastructure.Mappings
                    .HasColumnType("DATETIME")
                    .IsRequired();
 
-            builder.HasMany(x => x.Roles);
+            builder.HasMany(x => x.Roles)
+                   .WithMany(x => x.Users)
+                   .UsingEntity<Dictionary<string, object>>
+                    ("UserRoles",
+                        user => user
+                                .HasOne<Role>()
+                                .WithMany()
+                                .HasForeignKey("RoleId")
+                                .HasConstraintName("FK_UserRoles_RoleId"),
+
+                        role => role
+                                .HasOne<User>()
+                                .WithMany()
+                                .HasForeignKey("UserId")
+                                .HasConstraintName("FK_UserRoles_UserId"));
         }
 
         private void ConfigureIndexes(EntityTypeBuilder<User> builder)
