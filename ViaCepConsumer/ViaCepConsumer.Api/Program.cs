@@ -15,16 +15,7 @@ namespace ViaCepConsumer.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddDbContext<DatabaseContext>();
-            builder.Services.AddControllers();
-            builder.Services.AddTransient<ITokenService, TokenService>();
-            builder.Services.AddTransient<IViaCepService, ViaCepService>();
-            builder.Services.AddTransient<IUserRepository, UserRepository>();
-            builder.Services.AddTransient<ICachingService, CachingService>();
-
-            ConfigureAuthentication(builder);
-            ConfigureRedisCaching(builder);
-            ConfigureSwagger(builder);
+            ConfigureServices(builder);
 
             var app = builder.Build();
             app.MapControllers();
@@ -33,6 +24,26 @@ namespace ViaCepConsumer.Api
             app.UseSwagger();
             app.UseSwaggerUI();
             app.Run();
+        }
+
+        private static void ConfigureServices(WebApplicationBuilder builder)
+        {
+            builder.Services.AddControllers();
+
+            ConfigureDependencies(builder);
+            ConfigureAuthentication(builder);
+            ConfigureRedisCaching(builder);
+            ConfigureSwagger(builder);
+        }
+
+        private static void ConfigureDependencies(WebApplicationBuilder builder)
+        {
+            builder.Services.AddDbContext<DatabaseContext>();
+
+            builder.Services.AddTransient<ITokenService, TokenService>();
+            builder.Services.AddTransient<IViaCepService, ViaCepService>();
+            builder.Services.AddTransient<IUserRepository, UserRepository>();
+            builder.Services.AddTransient<ICachingService, CachingService>();
         }
 
         private static void ConfigureAuthentication(WebApplicationBuilder builder)
