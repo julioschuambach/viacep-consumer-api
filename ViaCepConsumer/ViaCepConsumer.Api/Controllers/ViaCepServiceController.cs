@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ViaCepConsumer.Api.Models;
 using ViaCepConsumer.Api.Services.Interfaces;
+using ViaCepConsumer.Api.ViewModels;
 
 namespace ViaCepConsumer.Api.Controllers
 {
@@ -21,11 +23,11 @@ namespace ViaCepConsumer.Api.Controllers
             try
             {
                 var response = await _service.Search(cep);
-                return StatusCode(200, response);
+                return StatusCode(200, new ResultViewModel<ViaCepResponseModel>(response));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, new ResultViewModel<string>(ex.Message));
             }
         }
     }

@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ViaCepConsumer.Api.Entities;
+using ViaCepConsumer.Api.Extensions;
 using ViaCepConsumer.Api.Infrastructure.Repositories.Interfaces;
 using ViaCepConsumer.Api.Models;
 using ViaCepConsumer.Api.Services.Interfaces;
+using ViaCepConsumer.Api.ViewModels;
 
 namespace ViaCepConsumer.Api.Controllers
 {
@@ -25,23 +27,26 @@ namespace ViaCepConsumer.Api.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserModel model)
         {
+            if (!ModelState.IsValid)
+                return StatusCode(400, new ResultViewModel<string>(ModelState.GetErrors()));
+
             if (!model.IsValid())
-                return StatusCode(400, "Passwords don't match!");
+                return StatusCode(400, new ResultViewModel<string>("Passwords don't match!"));
 
             User user = new(model);
 
             try
             {
                 await _repository.Insert(user);
-                return StatusCode(201, user);
+                return StatusCode(201, new ResultViewModel<User>(user));
             }
             catch (DbUpdateException)
             {
-                return StatusCode(400, "Username or email already registered.");
+                return StatusCode(400, new ResultViewModel<string>("Username or email already registered."));
             }
             catch
             {
-                return StatusCode(500, "Internal server error.");
+                return StatusCode(500, new ResultViewModel<string>("Internal server error."));
             }
         }
 
@@ -54,15 +59,15 @@ namespace ViaCepConsumer.Api.Controllers
                 User? user = await _repository.Get(x => string.Equals(x.Username, model.Username));
 
                 if (user is null || !string.Equals(user.Password, model.Password))
-                    return StatusCode(401, "Username or password is incorrect.");
+                    return StatusCode(401, new ResultViewModel<string>("Username or password is incorrect."));
 
                 var token = _tokenService.GenerateToken(user);
 
-                return StatusCode(200, token);
+                return StatusCode(200, new ResultViewModel<string>(token, new()));
             }
             catch
             {
-                return StatusCode(500, "Internal server error.");
+                return StatusCode(500, new ResultViewModel<string>("Internal server error."));
             }
         }
 
@@ -74,11 +79,11 @@ namespace ViaCepConsumer.Api.Controllers
             {
                 var users = await _repository.Get();
 
-                return StatusCode(200, users);
+                return StatusCode(200, new ResultViewModel<IEnumerable<User>>(users));
             }
             catch
             {
-                return StatusCode(500, "Internal server error.");
+                return StatusCode(500, new ResultViewModel<string>("Internal server error."));
             }
         }
     }
