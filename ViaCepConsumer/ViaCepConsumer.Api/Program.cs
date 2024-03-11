@@ -19,9 +19,10 @@ namespace ViaCepConsumer.Api
             builder.Services.AddTransient<ITokenService, TokenService>();
             builder.Services.AddTransient<IViaCepService, ViaCepService>();
             builder.Services.AddTransient<IUserRepository, UserRepository>();
+            builder.Services.AddTransient<ICachingService, CachingService>();
 
             ConfigureAuthentication(builder);
-
+            ConfigureRedisCaching(builder);
 
             var app = builder.Build();
             app.MapControllers();
@@ -48,6 +49,16 @@ namespace ViaCepConsumer.Api
                     ValidateAudience = false
                 };
             });
+        }
+
+        private static void ConfigureRedisCaching(WebApplicationBuilder builder)
+        {
+            builder.Services.AddStackExchangeRedisCache(
+                options =>
+                {
+                    options.InstanceName = "redis";
+                    options.Configuration = "localhost:6379";
+                });
         }
     }
 }
