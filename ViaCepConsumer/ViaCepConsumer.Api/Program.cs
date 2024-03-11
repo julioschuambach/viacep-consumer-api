@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -23,6 +24,7 @@ namespace ViaCepConsumer.Api
             app.UseAuthorization();
             app.UseSwagger();
             app.UseSwaggerUI();
+            ApplyMigrations(app);
             app.Run();
         }
 
@@ -125,6 +127,16 @@ namespace ViaCepConsumer.Api
                     }
                 });
             });
+        }
+
+        private static void ApplyMigrations(WebApplication app)
+        {
+            using var scope = app.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var context = services.GetRequiredService<DatabaseContext>();
+
+            if (context.Database.GetPendingMigrations().Any())
+                context.Database.Migrate();
         }
     }
 }
