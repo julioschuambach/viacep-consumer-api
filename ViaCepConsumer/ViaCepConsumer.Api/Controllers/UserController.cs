@@ -63,7 +63,7 @@ namespace ViaCepConsumer.Api.Controllers
 
                 var token = _tokenService.GenerateToken(user);
 
-                return StatusCode(200, new ResultViewModel<string>(token, new()));
+                return StatusCode(200, new ResultViewModel<string>(token, string.Empty));
             }
             catch
             {

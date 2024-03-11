@@ -2,8 +2,15 @@
 {
     public class ResultViewModel<T>
     {
-        public T Data { get; set; }
-        public List<string> Errors { get; set; } = new();
+        public T Data { get; private set; }
+        public List<string> Errors { get; private set; } = new();
+        public string InformationMessage { get; private set; } = string.Empty;
+
+        public ResultViewModel(T data, string informationMessage)
+        {
+            Data = data;
+            InformationMessage = informationMessage;
+        }
 
         public ResultViewModel(T data, List<string> errors)
         {

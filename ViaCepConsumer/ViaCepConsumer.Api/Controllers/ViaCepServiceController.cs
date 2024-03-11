@@ -34,13 +34,13 @@ namespace ViaCepConsumer.Api.Controllers
                 if (!string.IsNullOrEmpty(cacheResult))
                 {
                     response = JsonConvert.DeserializeObject<ViaCepResponseModel>(cacheResult);
-                    return StatusCode(200, new ResultViewModel<ViaCepResponseModel>(response));
+                    return StatusCode(200, new ResultViewModel<ViaCepResponseModel>(response, "This data was obtained from in-memory storage (Redis)."));
                 }
 
                 response = await _service.Search(cep);
                 await _caching.Set(cep, JsonConvert.SerializeObject(response));
 
-                return StatusCode(200, new ResultViewModel<ViaCepResponseModel>(response));
+                return StatusCode(200, new ResultViewModel<ViaCepResponseModel>(response, "This data was obtained from ViaCEP Web Service."));
             }
             catch (Exception ex)
             {
