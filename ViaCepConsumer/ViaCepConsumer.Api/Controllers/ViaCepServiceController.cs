@@ -21,6 +21,7 @@ namespace ViaCepConsumer.Api.Controllers
         }
 
         [HttpGet]
+        [HttpPost]
         [Route("{cep}")]
         [Authorize]
         public async Task<IActionResult> Search([FromRoute] string cep)
