@@ -35,13 +35,13 @@ namespace ViaCepConsumer.Api.Controllers
                 if (!string.IsNullOrEmpty(cacheResult))
                 {
                     response = JsonConvert.DeserializeObject<ViaCepResponseModel>(cacheResult);
-                    return StatusCode(200, new ResultViewModel<ViaCepResponseModel>(response, "This data was obtained from in-memory storage (Redis)."));
+                    return StatusCode(200, new ResultViewModel<ViaCepResponseModel>(response, "These data were obtained and temporarily cached in-memory/storage. The cached data will expire after 5 minutes from the initial data entry request, facilitating subsequent queries within this timeframe."));
                 }
 
                 response = await _service.Search(cep);
                 await _caching.Set(cep, JsonConvert.SerializeObject(response));
 
-                return StatusCode(200, new ResultViewModel<ViaCepResponseModel>(response, "This data was obtained from ViaCEP Web Service."));
+                return StatusCode(200, new ResultViewModel<ViaCepResponseModel>(response, "These data were obtained from ViaCEP Web Service (http://viacep.com.br). For the next 5 minutes, these data will be stored in-memory/cache storage, facilitating future queries with this same data entry."));
             }
             catch (Exception ex)
             {
