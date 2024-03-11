@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 using ViaCepConsumer.Api.Infrastructure.Contexts;
 using ViaCepConsumer.Api.Infrastructure.Repositories;
@@ -23,11 +24,14 @@ namespace ViaCepConsumer.Api
 
             ConfigureAuthentication(builder);
             ConfigureRedisCaching(builder);
+            ConfigureSwagger(builder);
 
             var app = builder.Build();
             app.MapControllers();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSwagger();
+            app.UseSwaggerUI();
             app.Run();
         }
 
@@ -59,6 +63,57 @@ namespace ViaCepConsumer.Api
                     options.InstanceName = "redis";
                     options.Configuration = "localhost:6379";
                 });
+        }
+
+        private static void ConfigureSwagger(WebApplicationBuilder builder)
+        {
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo()
+                {
+                    Version = "v1",
+                    Title = "ViaCEP consumer ASP.NET Web API",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Júlio Eduardo Schuambach",
+                        Url = new Uri("https://github.com/julioschuambach"),
+                        Email = "julioschuambach.dev@gmail.com"
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "MIT License",
+                        Url = new Uri("https://opensource.org/license/mit/")
+                    }
+                });
+
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "After registering and logging in, copy your bearer token and paste it like in the example below:" + "<br>" +
+                                  "Example: <strong>Bearer 1234567890abcdefghijklmnopqrstuvwxyz</strong><br><br>",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+
+                        }, new List<string>()
+                    }
+                });
+            });
         }
     }
 }
