@@ -8,7 +8,7 @@ services:
    - 1234:80
   depends_on:
    - redis
-   - sql-server
+   - mssql-server
   networks:
    viacep-consumer-network:
     aliases: 
@@ -23,7 +23,7 @@ services:
     aliases: 
      - redis
 
- sql-server:
+ mssql-server:
   image: mcr.microsoft.com/mssql/server
   environment:
    - "ACCEPT_EULA=Y"
@@ -33,7 +33,7 @@ services:
   networks:
    viacep-consumer-network:
     aliases: 
-     - sql-server
+     - mssql-server
 
 networks:
  viacep-consumer-network:
