@@ -72,7 +72,7 @@ namespace ViaCepConsumer.Api
                 options =>
                 {
                     options.InstanceName = "redis";
-                    options.Configuration = "localhost:6379";
+                    options.Configuration = "redis";
                 });
         }
 
