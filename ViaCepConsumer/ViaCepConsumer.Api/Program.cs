@@ -88,7 +88,7 @@ namespace ViaCepConsumer.Api
                     Title = "ViaCEP consumer ASP.NET Web API",
                     Contact = new OpenApiContact
                     {
-                        Name = "Júlio Eduardo Schuambach",
+                        Name = "Julio Eduardo Schuambach",
                         Url = new Uri("https://github.com/julioschuambach"),
                         Email = "julioschuambach.dev@gmail.com"
                     },
