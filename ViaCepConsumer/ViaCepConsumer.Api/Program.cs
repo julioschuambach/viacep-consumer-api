@@ -17,6 +17,7 @@ namespace ViaCepConsumer.Api
             builder.Services.AddDbContext<DatabaseContext>();
             builder.Services.AddControllers();
             builder.Services.AddTransient<ITokenService, TokenService>();
+            builder.Services.AddTransient<IViaCepService, ViaCepService>();
             builder.Services.AddTransient<IUserRepository, UserRepository>();
 
             ConfigureAuthentication(builder);
