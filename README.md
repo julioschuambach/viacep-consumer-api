@@ -1,14 +1,13 @@
 # ViaCEP Consumer API 
-
 ## Introdução
 Este projeto consiste em uma Web API criada utilizando o .NET 6. Nele, o usuário pode realizar consultas informando um CEP, após ter um cadastro e um token de acesso válido.
 
 ## Pré requisitos
-| Name | Link |
+| Nome | Link |
 | :--- | :---: |
-| Docker | (https://docs.docker.com/get-docker/) |
+| Docker | https://docs.docker.com/get-docker |
 
-> :bulb: Para maiores informações sobre a instalação, consulte a documentação oficial em: https://docs.docker.com/manuals/
+> :bulb: Para maiores informações sobre a instalação, consulte a documentação oficial em: https://docs.docker.com/manuals.
 
 ## Instalação
 ### 1) Fazendo o download ou clonando o projeto
@@ -50,7 +49,7 @@ Para realizar as requisições do ViaCEP Web Service, é necessário que você p
 </details>
 
 #### Realizando o login
-Após ter seu cadastro efetuado, você poderá realizar o login através do endpoint `users/login`, informando no corpo da requisição os dados referentes ao **nome de usuário** (`username`) e a senha (`password`).
+Após ter seu cadastro efetuado, você poderá realizar o login através do endpoint `users/login`, informando no corpo da requisição os dados referentes ao **nome de usuário** (`username`) e a **senha** (`password`).
 <details>
 <summary>Endpoint para login de usuário</summary>
 <img src = "Media/login-user.png">
@@ -77,7 +76,7 @@ Ao clicar no botão para autenticar seu usuário, será aberta uma janela com o 
 </details>
 <br>
 
-Após a autenticação de seu usuário, você poderá realizar as demais requisições durante **12** horas após a geração do seu token de autenticação, que é o tempo limite de expiração do token. Após este período, será necessário realizar o login de seu usuário novamente para a geração de um novo token.
+Após a autenticação de seu usuário, você poderá realizar as demais requisições durante **12** horas após a geração do seu **token de autenticação**, que é o tempo limite de expiração do token. Após este período, será necessário realizar o login de seu usuário novamente para a geração de um novo **token**.
 
 ### Utilizando o Postman
 #### Cadastrando um novo usuário
@@ -112,7 +111,7 @@ Para realizar o login, utilize o endpoint `http://localhost:1234/users/login`, i
 
 #### Métodos de consulta por CEP
 Para realizar as consultas, utilizando o web service da ViaCEP, você deve utilizar o endpoint `http://localhost:1234/cep/{cep}`, informando o CEP desejado na rota (parâmetro `{cep}`), e seu token de autenticação na aba `Authorization`, selecionando o tipo de token sendo `Bearer Token`.
-> :bulb: Este endpoint serve tanto para método `GET` quanto `POST`.
+> :bulb: Este endpoint serve tanto para requisições `GET`, quanto `POST`.
 <details>
 <summary>Realizando a consulta por método POST no Postman</summary>
 <img src = "Media/postman-cep-post.png">
@@ -128,7 +127,7 @@ Para realizar as consultas, utilizando o web service da ViaCEP, você deve utili
 
 ## Evoluções futuras
 #### Documentação
-- Traduzir README para inglês
+- Traduzir o README para inglês
 
 #### Segurança
 - Adicionar criptografia de senhas
@@ -136,3 +135,6 @@ Para realizar as consultas, utilizando o web service da ViaCEP, você deve utili
 
 #### Aplicação
 - Implementar contexto de papéis para os usuários
+
+#### Testes
+- Implementar testes unitários e de integração
