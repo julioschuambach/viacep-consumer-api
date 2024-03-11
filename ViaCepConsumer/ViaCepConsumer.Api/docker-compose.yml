@@ -1,0 +1,40 @@
+services:
+ api:
+  container_name: viacep-consumer-api
+  build:
+   dockerfile: Dockerfile
+   context: .
+  ports: 
+   - 1234:80
+  depends_on:
+   - redis
+   - mssql-server
+  networks:
+   viacep-consumer-network:
+    aliases: 
+     - api
+
+ redis:
+  image: redis
+  ports: 
+   - 6379:6379
+  networks: 
+   viacep-consumer-network:
+    aliases: 
+     - redis
+
+ mssql-server:
+  image: mcr.microsoft.com/mssql/server
+  environment:
+   - "ACCEPT_EULA=Y"
+   - "MSSQL_SA_PASSWORD=1q2w3e4r@#$"
+  ports:
+   - 1433:1433
+  networks:
+   viacep-consumer-network:
+    aliases: 
+     - mssql-server
+
+networks:
+ viacep-consumer-network:
+  driver: bridge
