@@ -42,14 +42,14 @@ Acesse a página do Swagger através do link `http://localhost:1234/swagger/inde
 </details>
 
 #### Cadastrando um novo usuário
-Para realizar as requisições do ViaCEP Web Service, é necessário que você possua um usuário cadastrado. Cadastre-se através do endpoint `users/register` informando no corpo da requisição os dados necessários.
+Para realizar as requisições do ViaCEP Web Service, é necessário que você possua um usuário cadastrado. Cadastre-se através do endpoint `/users/register` informando no corpo da requisição os dados necessários.
 <details>
 <summary>Endpoint para cadastro de usuário</summary>
 <img src = "Media/register-user.png">
 </details>
 
 #### Realizando o login
-Após ter seu cadastro efetuado, você poderá realizar o login através do endpoint `users/login`, informando no corpo da requisição os dados referentes ao **nome de usuário** (`username`) e a **senha** (`password`).
+Após ter seu cadastro efetuado, você poderá realizar o login através do endpoint `/users/login`, informando no corpo da requisição os dados referentes ao **nome de usuário** (`username`) e a **senha** (`password`).
 <details>
 <summary>Endpoint para login de usuário</summary>
 <img src = "Media/login-user.png">
@@ -95,7 +95,7 @@ Para cadastrar um novo usuário no Postman, utilize o endpoint `http://localhost
 </details>
 
 #### Realizando o login
-Para realizar o login, utilize o endpoint `http://localhost:1234/users/login`, informando no corpo da requisição:
+Para realizar o login, utilize o endereço `http://localhost:1234/users/login`, informando no corpo da requisição:
 ```json
 {
     "username": "seu nome de usuário",
@@ -110,7 +110,7 @@ Para realizar o login, utilize o endpoint `http://localhost:1234/users/login`, i
 > :bulb: Após o login, copie seu token de autenticação. Ele será necessário para as próximas requisições.
 
 #### Métodos de consulta por CEP
-Para realizar as consultas, utilizando o web service da ViaCEP, você deve utilizar o endpoint `http://localhost:1234/cep/{cep}`, informando o CEP desejado na rota (parâmetro `{cep}`), e seu token de autenticação na aba `Authorization`, selecionando o tipo de token sendo `Bearer Token`.
+Para realizar as consultas, utilizando o web service da ViaCEP, você deve utilizar o endereço `http://localhost:1234/cep/{cep}`, informando o **CEP** desejado na rota (parâmetro `{cep}`), e seu **token de autenticação** na aba `Authorization`, selecionando o tipo de token sendo `Bearer Token`.
 > :bulb: Este endpoint serve tanto para requisições `GET`, quanto `POST`.
 <details>
 <summary>Realizando a consulta por método POST no Postman</summary>
