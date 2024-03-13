@@ -23,6 +23,7 @@ namespace ViaCepConsumer.Api.Infrastructure.Repositories
         {
             User? user = await _dbContext.Users
                                          .AsNoTracking()
+                                         .Include(x => x.Roles)
                                          .FirstOrDefaultAsync(filter);
 
             return user;
