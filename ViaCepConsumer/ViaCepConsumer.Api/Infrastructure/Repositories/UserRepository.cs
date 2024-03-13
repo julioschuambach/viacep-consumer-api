@@ -21,7 +21,10 @@ namespace ViaCepConsumer.Api.Infrastructure.Repositories
 
         public async Task<User?> Get(Expression<Func<User, bool>> filter)
         {
-            User? user = await _dbContext.Users.FirstOrDefaultAsync(filter);
+            User? user = await _dbContext.Users
+                                         .AsNoTracking()
+                                         .Include(x => x.Roles)
+                                         .FirstOrDefaultAsync(filter);
 
             return user;
         }
@@ -29,6 +32,7 @@ namespace ViaCepConsumer.Api.Infrastructure.Repositories
         public async Task<IEnumerable<User>> Get()
         {
             List<User> users = await _dbContext.Users
+                                               .AsNoTracking()
                                                .Include(x => x.Roles)
                                                .ToListAsync();
 
