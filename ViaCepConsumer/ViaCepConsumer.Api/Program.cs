@@ -46,6 +46,7 @@ namespace ViaCepConsumer.Api
             builder.Services.AddTransient<IViaCepService, ViaCepService>();
             builder.Services.AddTransient<IUserRepository, UserRepository>();
             builder.Services.AddTransient<ICachingService, CachingService>();
+            builder.Services.AddTransient<IEncryptorService, EncryptorService>();
         }
 
         private static void ConfigureAuthentication(WebApplicationBuilder builder)

@@ -16,11 +16,13 @@ namespace ViaCepConsumer.Api.Controllers
     {
         private readonly IUserRepository _repository;
         private readonly ITokenService _tokenService;
+        private readonly IEncryptorService _encryptorService;
 
-        public UserController(IUserRepository repository, ITokenService tokenService)
+        public UserController(IUserRepository repository, ITokenService tokenService, IEncryptorService encryptorService)
         {
             _repository = repository;
             _tokenService = tokenService;
+            _encryptorService = encryptorService;
         }
 
         [HttpPost]
@@ -33,7 +35,7 @@ namespace ViaCepConsumer.Api.Controllers
             if (!model.IsValid())
                 return StatusCode(400, new ResultViewModel<string>("Passwords don't match!"));
 
-            User user = new(model);
+            User user = new(model, _encryptorService.Encrypt(model.Password));
 
             try
             {
@@ -58,7 +60,7 @@ namespace ViaCepConsumer.Api.Controllers
             {
                 User? user = await _repository.Get(x => string.Equals(x.Username, model.Username));
 
-                if (user is null || !string.Equals(user.Password, model.Password))
+                if (user is null || !_encryptorService.Validate(model.Password, user.Password))
                     return StatusCode(401, new ResultViewModel<string>("Username or password is incorrect."));
 
                 var token = _tokenService.GenerateToken(user);

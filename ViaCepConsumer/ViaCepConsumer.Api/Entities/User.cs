@@ -13,11 +13,11 @@ namespace ViaCepConsumer.Api.Entities
 
         public User() { }
 
-        public User(RegisterUserModel model)
+        public User(RegisterUserModel model, string encryptedPassword)
         {
             Username = model.Username;
             Email = model.Email;
-            Password = model.Password;
+            Password = encryptedPassword;
         }
     }
 }
