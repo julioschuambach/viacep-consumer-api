@@ -130,7 +130,6 @@ Para realizar as consultas, utilizando o web service da ViaCEP, você deve utili
 - Traduzir o README para inglês
 
 #### Segurança
-- Adicionar criptografia de senhas
 - Adicionar novos modelos de respostas apenas com as informações necessárias (evitando expôr dados sensíveis)
 
 #### Aplicação
